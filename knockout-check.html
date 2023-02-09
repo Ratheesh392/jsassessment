@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="./knockout-3.2.0.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<style>
+      body{
+  /* font-family:sans-serif; */
+  /* font-weight:bold; */
+  /* font-size: 30px; */
+  /* display:flex;
+  align-items:center;
+  justify-content:center; */
+  /* padding:30px; */
+}
+.cont{
+  /* width:720px; */
+}
+.container{
+  /* display:flex; */
+  /* flex-wrap:wrap; */
+  /* width:720px; */
+  /* justify-content:flex-start; */
+}
+.test{
+  visibility: hidden;
+}
+.single-item{
+  /* width:100%;
+  height:100%; */
+  /* display:flex; */
+  /* align-items:center; */
+  /* justify-content:center; */
+  background-color:#f3f3f3;
+  margin: 20px;
+  border-radius: 10px;
+  color:#888;
+}
+.page{
+  padding-right: 10px;
+  color:black;
+}
+.pagination{
+  
+  padding:20px;
+  
+  &,
+  *{
+    user-select: none;
+  }
+  
+  a{
+    display:inline-block;
+    padding:0 10px;
+    cursor:pointer;
+    &.disabled{
+      opacity:.3;
+      pointer-events: none;
+    cursor:not-allowed;
+    }
+    &.current{
+      background:#f3f3f3;
+    }
+  }
+}
+  .dropbtn {
+    /* background-color: green; */
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    width: 300px;
+    height: auto;
+  }
+  
+  .dropdown-content .btn {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  /* .dropdown-content .btn:hover {background-color: #f1f1f1;}
+  .dropdown:hover .dropdown-content {display: block;} */
+  /* .dropdown:hover .dropbtn {background-color:red;} */
+  .product{
+    display: flex;
+  }
+  </style>
+<body>
+<div class="jumbotron text-center "style="padding:0">
+  <h1>List out the products</h1>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      
+        <div class="container-fluid">
+         
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation" >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+            <ul class="navbar-nav">
+                <div class="dropdown" style="left: 1604%;position: relative;">
+                  <span data-bind='text: numberOfClicks'>&nbsp;</span>
+                    <button class="dropbtn" data-bind="click: cartListClick "><img width=50px height="40px" src="https://cdn-icons-png.flaticon.com/512/70/70021.png"></button>
+                    <div class="dropdown-content">
+                    
+                        <div data-bind="foreach: myArray1">
+                            <div class="product">
+                                <div class="img detail">
+                                  <img style="width: 120%;" data-bind="attr:{src: productImg}"> 
+                                </div>
+                                <div class="detail">
+                                  <p><b style="font-size: 12px;" data-bind="text: name"></b></p>
+                                  
+                                  <!-- <button style="bottom: 10px;left:120px;position:relative;background-color: rgba(255, 0, 0, 0.722);border-radius: 10px;" data-bind="click: $root.remove">Delete</button> -->
+                                </div>
+                                <div class="detail" style="padding:15px">
+                                  <b class="currencyINR" style="font-size: 12px; color:red"data-bind="text: price"> </b>
+                                  <input type="text" id="qtynumber" data-bind="value: quantity, event: { change: quantityChange }" style="width: 44px;"/>
+                                </div>
+                            </div>
+                           <hr>
+                        </div>
+                        <div style="padding-bottom: 14px;"> 
+                        <strong style="font-size: 26px;">Total-price:</strong><b style="color:red;font-size: 26px;">₹</b><strong><span style="color:red;font-size: 26px;" data-bind='text: totalprice'></span><b style="color:red;font-size: 26px;">.00</b></strong>
+                     <!-- <button style="left: 50px;position: relative;" class="btn btn-primary p-1">Proceed To Checkout</button> -->
+                    </div>
+                    </div>
+                  </div>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Cart (<span data-bind='text: numberOfClicks'>&nbsp;</span>)</button> -->
+    </div>
+</div>
+</div>
+<div class ="row">
+  <div class="col-sm-6 demo"style ="padding-left: 21%;">
+<div class="container single-item">
+  <div class="row" id="product1">
+    <div class="col-sm-2">
+        <span class="wishlist">
+            <a alt="Add to Wish List" title="Add to Wish List" href="javascript:void(0);"> <i class="fa fa-heart"></i></a>
+            </span>
+            <a href="#">
+            <img id="product1_img" src="https://m.media-amazon.com/images/I/413BKFILfuL._AC_AA180_.jpg"> 
+            </a>
+    </div>
+    <div class="col-sm-4">
+      <a id="product1_name" href="test.html?productimg=https://m.media-amazon.com/images/I/413BKFILfuL._AC_AA180_.jpg&productname=IKALL K2 Plus Smartphone with 5.5 Inch Display (4GB+64GB, 2800 mAh) (Sky Blue)&productprice=₹5,699.00">IKALL K2 Plus Smartphone with 5.5 Inch Display (4GB+64GB, 2800 mAh) (Sky Blue)</a>
+
+      <!-- <h4><b id="product1_name">IKALL K2 Plus Smartphone with 5.5 Inch Display (4GB+64GB, 2800 mAh) (Sky Blue)</b></h4> -->
+      <p style="color:red">Only 1 left in stock.</p>
+      <p>Sold by <b style="color:blue">Arigato.</b></p>
+      <p>Gift options not available.Gift options not available. <b style="color:blue">Learn more.</b></p>
+      <p><b>Colour: </b>Sky Blue</p>
+    </div>
+    <div class="col-sm-4">
+<h4 class="currencyINR" id="product1_price">  ₹5,699.00</h4>
+<button data-bind='click: registerClick, disable: hasClickedTooManyTimes' id="product1_btn">Add to cart</button>
+
+</div>
+  </div>
+</div>
+<div class="container single-item">
+    <div class="row" id="product2">
+      <div class="col-sm-2">
+          <span class="wishlist">
+              <a alt="Add to Wish List" title="Add to Wish List" href="javascript:void(0);"> <i class="fa fa-heart"></i></a>
+              </span>
+              <a href="#">
+              <img id="product2_img" src="https://m.media-amazon.com/images/I/71EjohFmm6L._AC_AA180_.jpg"> 
+              </a>
+      </div>
+      <div class="col-sm-4">
+        <a id="product2_name" href="test.html?productimg=https://m.media-amazon.com/images/I/71EjohFmm6L._AC_AA180_.jpg&productname=Samsung Galaxy M13 5G (Midnight Blue, 4GB, 64GB Storage) | 5000mAh Battery | Upto 8GB RAM with RAM Plus&productprice=₹11,999.00">Samsung Galaxy M13 5G (Midnight Blue, 4GB, 64GB Storage) | 5000mAh Battery | Upto 8GB RAM with RAM Plus</a>
+        <!-- <a href='<?php page2.php?>'>link to page2</a> -->
+
+        <!-- <h4><b id="product2_name">Samsung Galaxy M13 5G (Midnight Blue, 4GB, 64GB Storage) | 5000mAh Battery | Upto 8GB RAM with RAM Plus</b></h4> -->
+        <p style="color:red">Only 1 left in stock.</p>
+        <p>Sold by <b style="color:blue">Arigato.</b></p>
+        <p>Gift options not available.Gift options not available. <b style="color:blue">Learn more.</b></p>
+        <p><b>Colour: </b>Sky Blue</p>
+      </div>
+      <div class="col-sm-4">
+  <h4 class="currencyINR" id="product2_price">    ₹11,999.00  </h4>
+  <button data-bind='click: registerClick, disable: hasClickedTooManyTimes' id="product2_btn">Add to cart</button>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="container single-item">
+    <div class="row" id="product3">
+      <div class="col-sm-2">
+          <span class="wishlist">
+              <a alt="Add to Wish List" title="Add to Wish List" href="javascript:void(0);"> <i class="fa fa-heart"></i></a>
+              </span>
+              <a href="#">
+              <img id="product3_img" src="https://m.media-amazon.com/images/I/81t6Av5DvXL._AC_AA180_.jpg"> 
+              </a>
+      </div>
+      <div class="col-sm-4">
+        <a id="product3_name" href="test.html?productimg=https://m.media-amazon.com/images/I/81t6Av5DvXL._AC_AA180_.jpg&productname=Samsung Galaxy M04 Dark Blue, 4GB RAM, 128GB Storage | Upto 8GB RAM with RAM Plus | MediaTek Helio P35 | 5000 mAh Battery&productprice=₹9,999.00">Samsung Galaxy M04 Dark Blue, 4GB RAM, 128GB Storage | Upto 8GB RAM with RAM Plus | MediaTek Helio P35 | 5000 mAh Battery</a>
+
+        <!-- <h4><b id="product3_name">Samsung Galaxy M04 Dark Blue, 4GB RAM, 128GB Storage | Upto 8GB RAM with RAM Plus | MediaTek Helio P35 | 5000 mAh Battery</b></h4> -->
+        <p style="color:red">Only 1 left in stock.</p>
+        <p>Sold by <b style="color:blue">Arigato.</b></p>
+        <p>Gift options not available.Gift options not available. <b style="color:blue">Learn more.</b></p>
+        <p><b>Colour: </b>Sky Blue</p>
+      </div>
+      <div class="col-sm-4">
+  <h4 class="currencyINR" id="product3_price">  ₹9,999.00</h4>
+  <button data-bind='click: registerClick, disable: hasClickedTooManyTimes' id="product3_btn">Add to cart</button>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="container single-item">
+    <div class="row" id="product4">
+      <div class="col-sm-2">
+          <span class="wishlist">
+              <a alt="Add to Wish List" title="Add to Wish List" href="javascript:void(0);"> <i class="fa fa-heart"></i></a>
+              </span>
+              <a href="#">
+              <img id="product4_img" src="https://m.media-amazon.com/images/I/81UT07JsBqL._AC_UY218_.jpg"> 
+              </a>
+      </div>
+      <div class="col-sm-4">
+        <a id="product4_name" href="test.html?productimg=https://m.media-amazon.com/images/I/81UT07JsBqL._AC_UY218_.jpg&productname=Redmi A1 (Light Blue, 2GB RAM, 32GB Storage) | Segment Best AI Dual Cam | 5000mAh Battery | Leather Texture Design | Android 12&productprice=₹6,499.00">Redmi A1 (Light Blue, 2GB RAM, 32GB Storage) | Segment Best AI Dual Cam | 5000mAh Battery | Leather Texture Design | Android 12</a>
+
+        <!-- <h4><b id="product4_name">Redmi A1 (Light Blue, 2GB RAM, 32GB Storage) | Segment Best AI Dual Cam | 5000mAh Battery | Leather Texture Design | Android 12</b></h4> -->
+        <p style="color:red">Only 1 left in stock.</p>
+        <p>Sold by <b style="color:blue">Arigato.</b></p>
+        <p>Gift options not available.Gift options not available. <b style="color:blue">Learn more.</b></p>
+        <p><b>Colour: </b>Sky Blue</p>
+      </div>
+      <div class="col-sm-4">
+  <h4 class="currencyINR" id="product4_price">  ₹6,499 </h4>
+  <button data-bind='click: registerClick, disable: hasClickedTooManyTimes' id="product4_btn">Add to cart</button>
+
+      </div>
+    </div>
+  </div>  
+
+  <div class="container single-item">
+    <div class="row" id="product5">
+      <div class="col-sm-2">
+          <span class="wishlist">
+              <a alt="Add to Wish List" title="Add to Wish List" href="javascript:void(0);"> <i class="fa fa-heart"></i></a>
+              </span>
+              <a href="#">
+              <img src="https://m.media-amazon.com/images/I/71geVdy6-OS._AC_UY218_.jpg"> 
+              </a>
+      </div>
+      <div class="col-sm-4">
+        <a id="product5_name" href="test.html?productimg=https://m.media-amazon.com/images/I/71geVdy6-OS._AC_UY218_.jpg&productname=OPPO A74 5G (Fantastic Purple,6GB RAM,128GB Storage) with No Cost EMI/Additional Exchange Offers&productprice=₹15,490.00">OPPO A74 5G (Fantastic Purple,6GB RAM,128GB Storage) with No Cost EMI/Additional Exchange Offers</a>
+
+        <!-- <h4><b id="product5_name">OPPO A74 5G (Fantastic Purple,6GB RAM,128GB Storage) with No Cost EMI/Additional Exchange Offers</b></h4> -->
+        <p style="color:red">Only 1 left in stock.</p>
+        <p>Sold by <b style="color:blue">Arigato.</b></p>
+        <p>Gift options not available.Gift options not available. <b style="color:blue">Learn more.</b></p>
+        <p><b>Colour: </b>Sky Blue</p>
+      </div>
+      <div class="col-sm-4">
+  <h4 class="currencyINR" id="product5_price">  ₹15,490 </h4>
+  <button data-bind='click: registerClick, disable: hasClickedTooManyTimes' id="product5_btn">Add to cart</button>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="container single-item">
+    <div class="row" id="product6">
+      <div class="col-sm-2">
+          <span class="wishlist">
+              <a alt="Add to Wish List" title="Add to Wish List" href="javascript:void(0);"> <i class="fa fa-heart"></i></a>
+              </span>
+              <a href="#">
+              <img id="product6_img" src="https://m.media-amazon.com/images/I/51aDzaGYDBL._AC_UY218_.jpg"> 
+              </a>
+      </div>
+      <div class="col-sm-4">
+        <a id="product6_name" href="test.html?productimg=https://m.media-amazon.com/images/I/51aDzaGYDBL._AC_UY218_.jpg&productname=IKALL Z20 Pro Smartphone (Blue)&productprice=₹7,999.00">IKALL Z20 Pro Smartphone (Blue)</a>
+
+        <!-- <h4><b id="product6_name">IKALL Z20 Pro Smartphone (Blue)</b></h4> -->
+        <p style="color:red">Only 1 left in stock.</p>
+        <p>Sold by <b style="color:blue">Arigato.</b></p>
+        <p>Gift options not available.Gift options not available. <b style="color:blue">Learn more.</b></p>
+        <p><b>Colour: </b>Sky Blue</p>
+      </div>
+      <div class="col-sm-4">
+  <h4 class="currencyINR" id="product6_price">  ₹7,999.00 </h4>
+  <button data-bind='click: registerClick, disable: hasClickedTooManyTimes' id="product6_btn">Add to cart</button>
+  
+  </div>
+    </div>
+  </div>
+  <div class="container single-item">
+    <div class="row" id="product7">
+      <div class="col-sm-2">
+          <span class="wishlist">
+              <a alt="Add to Wish List" title="Add to Wish List" href="javascript:void(0);"> <i class="fa fa-heart"></i></a>
+              </span>
+              <a href="#">
+              <img id="product7_img" src="https://m.media-amazon.com/images/I/81UT07JsBqL._AC_UY218_.jpg"> 
+              </a>
+      </div>
+      <div class="col-sm-4">
+        <a id="product7_name" href="test.html?productimg=https://m.media-amazon.com/images/I/81UT07JsBqL._AC_UY218_.jpg&productname=Redmi A1 (Light Blue, 2GB RAM, 32GB Storage)&productprice=₹6,499.00">Redmi A1 (Light Blue, 2GB RAM, 32GB Storage)</a>
+
+        <!-- <h4><b id="product7_name">Redmi A1 (Light Blue, 2GB RAM, 32GB Storage)</b></h4> -->
+        <p style="color:red">Only 1 left in stock.</p>
+        <p>Sold by <b style="color:blue">Arigato.</b></p>
+        <p>Gift options not available.Gift options not available. <b style="color:blue">Learn more.</b></p>
+        <p><b>Colour: </b>Sky Blue</p>
+      </div>
+      <div class="col-sm-4">
+  <h4 class="currencyINR" id="product7_price">  ₹6,499.00</h4>
+  <button data-bind='click: registerClick, disable: hasClickedTooManyTimes' id="product7_btn">Add to cart</button>
+  
+  </div>
+    </div>
+  </div>
+  <div class="container single-item">
+    <div class="row" id="product8">
+      <div class="col-sm-2">
+          <span class="wishlist">
+              <a alt="Add to Wish List" title="Add to Wish List" href="javascript:void(0);"> <i class="fa fa-heart"></i></a>
+              </span>
+              <a href="#">
+              <img id="product8_img" src="https://m.media-amazon.com/images/I/413BKFILfuL._AC_AA180_.jpg"> 
+              </a>
+      </div>
+      <div class="col-sm-4">
+        <a id="product8_name" href="test.html?productimg=https://m.media-amazon.com/images/I/413BKFILfuL._AC_AA180_.jpg&productname=OPPO A74 5G (Fantastic Purple,6GB RAM,128GB Storage)&productprice=₹15,490.00">OPPO A74 5G (Fantastic Purple,6GB RAM,128GB Storage)</a>
+
+        <!-- <h4><b id="product8_name">OPPO A74 5G (Fantastic Purple,6GB RAM,128GB Storage)</b></h4> -->
+        <p style="color:red">Only 1 left in stock.</p>
+        <p>Sold by <b style="color:blue">Arigato.</b></p>
+        <p>Gift options not available.Gift options not available. <b style="color:blue">Learn more.</b></p>
+        <p><b>Colour: </b>Sky Blue</p>
+      </div>
+      <div class="col-sm-4">
+  <h4 class="currencyINR" id="product8_price">  ₹15,490.00</h4>
+  <button data-bind='click: registerClick, disable: hasClickedTooManyTimes' id="product8_btn">Add to cart</button>
+  
+  </div>
+    </div>
+  </div>
+  <div class="container single-item">
+    <div class="row" id="product9">
+      <div class="col-sm-2">
+          <span class="wishlist">
+              <a alt="Add to Wish List" title="Add to Wish List" href="javascript:void(0);"> <i class="fa fa-heart"></i></a>
+              </span>
+              <a href="#">
+              <img id="product9_img" src="https://m.media-amazon.com/images/I/810KHyQ4WcL._AC_UY218_.jpg"> 
+              </a>
+      </div>
+      <div class="col-sm-4">
+        <a id="product9_name" href="test.html?productimg=https://m.media-amazon.com/images/I/810KHyQ4WcL._AC_UY218_.jpg&productname=Redmi 9A Sport (Coral Green, 2GB RAM, 32GB Storage)&productprice=₹6,499.00">Redmi 9A Sport (Coral Green, 2GB RAM, 32GB Storage)</a>
+
+        <!-- <h4><b id="product9_name">Redmi 9A Sport (Coral Green, 2GB RAM, 32GB Storage)</b></h4> -->
+        <p style="color:red">Only 1 left in stock.</p>
+        <p>Sold by <b style="color:blue">Arigato.</b></p>
+        <p>Gift options not available.Gift options not available. <b style="color:blue">Learn more.</b></p>
+        <p><b>Colour: </b>Sky Blue</p>
+      </div>
+      <div class="col-sm-4">
+  <h4 class="currencyINR" id="product9_price">  ₹6,499.00</h4>
+  <button data-bind='click: registerClick, disable: hasClickedTooManyTimes' id="product9_btn">Add to cart</button>
+  
+  </div>
+    </div>
+  </div>
+  <div class="container single-item">
+    <div class="row" id="product10">
+      <div class="col-sm-2">
+          <span class="wishlist">
+              <a alt="Add to Wish List" title="Add to Wish List" href="javascript:void(0);"> <i class="fa fa-heart"></i></a>
+              </span>
+              <a href="#">
+              <img id="product10_img" src="https://m.media-amazon.com/images/I/71kVEmAMyEL._AC_UY218_.jpg"> 
+              </a>
+      </div>
+      <div class="col-sm-4">
+        <a id="product10_name" href="test.html?productimg=https://m.media-amazon.com/images/I/71kVEmAMyEL._AC_UY218_.jpg&productname=Redmi 10A&productprice=₹8,699.00">Redmi 10A</a>
+
+        <!-- <h4><b id="product10_name">Redmi 10A </b></h4> -->
+        <p style="color:red">Only 1 left in stock.</p>
+        <p>Sold by <b style="color:blue">Arigato.</b></p>
+        <p>Gift options not available.Gift options not available. <b style="color:blue">Learn more.</b></p>
+        <p><b>Colour: </b>Sky Blue</p>
+      </div>
+      <div class="col-sm-4">
+  <h4 class="currencyINR" id="product10_price">  ₹8,699.00</h4>
+  <button data-bind='click: registerClick, disable: hasClickedTooManyTimes' id="product10_btn">Add to cart</button>
+  
+  </div>
+    </div>
+  </div>
+  <div class="container single-item">
+    <div class="row" id="product11">
+      <div class="col-sm-2">
+          <span class="wishlist">
+              <a alt="Add to Wish List" title="Add to Wish List" href="javascript:void(0);"> <i class="fa fa-heart"></i></a>
+              </span>
+              <a href="#">
+              <img id="product11_img" src="https://m.media-amazon.com/images/I/81-fFXQdPTL._AC_UY218_.jpg"> 
+              </a>
+      </div>
+      <div class="col-sm-4">
+        <a id="product11_name" href="test.html?productimg=https://m.media-amazon.com/images/I/81-fFXQdPTL._AC_UY218_.jpg&productname=Samsung Galaxy M13 (Aqua Green, 4GB, 64GB Storage)&productprice=₹10,699.00">Samsung Galaxy M13 (Aqua Green, 4GB, 64GB Storage)</a>
+
+        <!-- <h4><b id="product11_name">Samsung Galaxy M13 (Aqua Green, 4GB, 64GB Storage)</b></h4> -->
+        <p style="color:red">Only 1 left in stock.</p>
+        <p>Sold by <b style="color:blue">Arigato.</b></p>
+        <p>Gift options not available.Gift options not available. <b style="color:blue">Learn more.</b></p>
+        <p><b>Colour: </b>Sky Blue</p>
+      </div>
+      <div class="col-sm-4">
+  <h4 class="currencyINR" id="product11_price">  ₹10,699.00</h4>
+  <button data-bind='click: registerClick, disable: hasClickedTooManyTimes' id="product11_btn">Add to cart</button>
+  
+  </div>
+    </div>
+  </div>
+  <div class="container single-item">
+    <div class="row" id="product12">
+      <div class="col-sm-2">
+          <span class="wishlist">
+              <a alt="Add to Wish List" title="Add to Wish List" href="javascript:void(0);"> <i class="fa fa-heart"></i></a>
+              </span>
+              <a href="#">
+              <img id="product12_img" src="https://m.media-amazon.com/images/I/71KCwNV6MuL._AC_UY218_.jpg"> 
+              </a>
+      </div>
+      <div class="col-sm-4">
+        <a id="product12_name" href="test.html?productimg=https://m.media-amazon.com/images/I/71KCwNV6MuL._AC_UY218_.jpg&productname=OPPO A31 (Mystery Black, 6GB RAM, 128GB Storage) with No Cost EMI/Additional Exchange Offers&productprice=₹12,490.00">OPPO A31 (Mystery Black, 6GB RAM, 128GB Storage) with No Cost EMI/Additional Exchange Offers</a>
+
+        <!-- <h4><b id="product12_name">OPPO A31 (Mystery Black, 6GB RAM, 128GB Storage) with No Cost EMI/Additional Exchange Offers</b></h4> -->
+        <p style="color:red">Only 1 left in stock.</p>
+        <p>Sold by <b style="color:blue">Arigato.</b></p>
+        <p>Gift options not available.Gift options not available. <b style="color:blue">Learn more.</b></p>
+        <p><b>Colour: </b>Sky Blue</p>
+      </div>
+      <div class="col-sm-4">
+  <h4 class="currencyINR" id="product12_price">  ₹12,490.00</h4>
+  <button data-bind='click: registerClick, disable: hasClickedTooManyTimes' id="product12_btn">Add to cart</button>
+  
+  </div>
+    </div>
+  </div>
+  <div class="container single-item">
+    <div class="row" id="product13">
+      <div class="col-sm-2">
+          <span class="wishlist">
+              <a alt="Add to Wish List" title="Add to Wish List" href="javascript:void(0);"> <i class="fa fa-heart"></i></a>
+              </span>
+              <a href="#">
+              <img id="product13_img" src="https://m.media-amazon.com/images/I/81UmTnrBDSL._AC_UY218_.jpg"> 
+              </a>
+      </div>
+      <div class="col-sm-4">
+        <a id="product13_name" href="test.html?productimg=https://m.media-amazon.com/images/I/81UmTnrBDSL._AC_UY218_.jpg&productname=Redmi A1 (Light Green, 2GB RAM 32GB ROM)&productprice=₹6,699.00">Redmi A1 (Light Green, 2GB RAM 32GB ROM)</a>
+        <!-- <h4><b id="product13_name">Redmi A1 (Light Green, 2GB RAM 32GB ROM)</b></h4> -->
+        <p style="color:red">Only 1 left in stock.</p>
+        <p>Sold by <b style="color:blue">Arigato.</b></p>
+        <p>Gift options not available.Gift options not available. <b style="color:blue">Learn more.</b></p>
+        <p><b>Colour: </b>Sky Blue</p>
+      </div>
+      <div class="col-sm-4">
+  <h4 class="currencyINR" id="product13_price">  ₹6,699.00</h4>
+  <button data-bind='click: registerClick, disable: hasClickedTooManyTimes' id="product13_btn">Add to cart</button>
+  
+  </div>
+    </div>
+  </div>
+  <div class="container single-item">
+    <div class="row" id="product14">
+      <div class="col-sm-2">
+          <span class="wishlist">
+              <a alt="Add to Wish List" title="Add to Wish List" href="javascript:void(0);"> <i class="fa fa-heart"></i></a>
+              </span>
+              <a href="#">
+              <img id="product14_img" src="https://m.media-amazon.com/images/I/91c4uO7vK+L._AC_UY218_.jpg"> 
+              </a>
+      </div>
+      <div class="col-sm-4">
+        <a id="product14_name" href="test.html?productimg=https://m.media-amazon.com/images/I/91c4uO7vK+L._AC_UY218_.jpg&productname=Tecno Spark 9&productprice=₹8,999.00">Tecno Spark 9</a>
+
+        <!-- <h4><b id="product14_name">Tecno Spark 9</b></h4> -->
+        <p style="color:red">Only 1 left in stock.</p>
+        <p>Sold by <b style="color:blue">Arigato.</b></p>
+        <p>Gift options not available.Gift options not available. <b style="color:blue">Learn more.</b></p>
+        <p><b>Colour: </b>Sky Blue</p>
+      </div>
+      <div class="col-sm-4">
+  <h4 class="currencyINR" id="product14_price">  ₹8,999.00</h4>
+  <button data-bind='click: registerClick, disable: hasClickedTooManyTimes' id="product14_btn">Add to cart</button>
+  
+  </div>
+    </div>
+  </div>
+  <div class="container single-item">
+    <div class="row" id="product15">
+      <div class="col-sm-2">
+          <span class="wishlist">
+              <a alt="Add to Wish List" title="Add to Wish List" href="javascript:void(0);"> <i class="fa fa-heart"></i></a>
+              </span>
+              <a href="#">
+              <img id="product15_img" src="https://m.media-amazon.com/images/I/81eM15lVcJL._AC_UY218_.jpg"> 
+              </a>
+      </div>
+      <div class="col-sm-4">
+        <a id="product15_name" href="test.html?productimg=https://m.media-amazon.com/images/I/81eM15lVcJL._AC_UY218_.jpg&productname=Redmi 10 Power (Power Black, 8GB RAM, 128GB Storage)&productprice=₹11,999.00">Redmi 10 Power (Power Black, 8GB RAM, 128GB Storage)</a>
+
+        <!-- <h4><b id="product15_name">Redmi 10 Power (Power Black, 8GB RAM, 128GB Storage)</b></h4> -->
+        <p style="color:red">Only 1 left in stock.</p>
+        <p>Sold by <b style="color:blue">Arigato.</b></p>
+        <p>Gift options not available.Gift options not available. <b style="color:blue">Learn more.</b></p>
+        <p><b>Colour: </b>Sky Blue</p>
+      </div>
+      <div class="col-sm-4">
+  <h4 class="currencyINR" id="product15_price">  ₹11,999.00</h4>
+  <button data-bind='click: registerClick, disable: hasClickedTooManyTimes' id="product15_btn">Add to cart</button>
+  
+  </div>
+    </div>
+  </div>
+  <div class="container single-item">
+    <div class="row" id="product16">
+      <div class="col-sm-2">
+          <span class="wishlist">
+              <a alt="Add to Wish List" title="Add to Wish List" href="javascript:void(0);"> <i class="fa fa-heart"></i></a>
+              </span>
+              <a href="#">
+              <img id="product16_img" src="https://m.media-amazon.com/images/I/814ePfNubRL._AC_UY218_.jpg"> 
+              </a>
+      </div>
+      <div class="col-sm-4">
+        <a id="product16_name" href="test.html?productimg=https://m.media-amazon.com/images/I/814ePfNubRL._AC_UY218_.jpg&productname=Samsung Galaxy M04 Light Green, 4GB RAM, 64GB Storage&productprice=₹8,699.00">Samsung Galaxy M04 Light Green, 4GB RAM, 64GB Storage</a>
+
+        <!-- <h4><b id="product16_name">Samsung Galaxy M04 Light Green, 4GB RAM, 64GB Storage</b></h4> -->
+        <p style="color:red">Only 1 left in stock.</p>
+        <p>Sold by <b style="color:blue">Arigato.</b></p>
+        <p>Gift options not available.Gift options not available. <b style="color:blue">Learn more.</b></p>
+        <p><b>Colour: </b>Sky Blue</p>
+      </div>
+      <div class="col-sm-4">
+  <h4 class="currencyINR" id="product16_price">  ₹8,699.00</h4>
+  <button data-bind='click: registerClick, disable: hasClickedTooManyTimes' id="product16_btn">Add to cart</button>
+  
+  </div>
+    </div>
+  </div>
+  <div class="container single-item">
+    <div class="row" id="product17">
+      <div class="col-sm-2">
+          <span class="wishlist">
+              <a alt="Add to Wish List" title="Add to Wish List" href="javascript:void(0);"> <i class="fa fa-heart"></i></a>
+              </span>
+              <a href="#">
+              <img id="product17_img" src="https://m.media-amazon.com/images/I/81OZGH4fZiL._AC_UY218_.jpg"> 
+              </a>
+      </div>
+      <div class="col-sm-4">
+        <a id="product17_name" href="test.html?productimg=https://m.media-amazon.com/images/I/81OZGH4fZiL._AC_UY218_.jpg&productname=Xiaomi Redmi 10 Power (Sporty Orange, 8GB RAM, 128GB Storage)&productprice=₹11,999.00">Xiaomi Redmi 10 Power (Sporty Orange, 8GB RAM, 128GB Storage)</a>
+
+        <!-- <h4><b id="product17_name">Xiaomi Redmi 10 Power (Sporty Orange, 8GB RAM, 128GB Storage)</b></h4> -->
+        <p style="color:red">Only 1 left in stock.</p>
+        <p>Sold by <b style="color:blue">Arigato.</b></p>
+        <p>Gift options not available.Gift options not available. <b style="color:blue">Learn more.</b></p>
+        <p><b>Colour: </b>Sky Blue</p>
+      </div>
+      <div class="col-sm-4">
+  <h4 class="currencyINR" id="product17_price">  ₹11,999.00</h4>
+  <button data-bind='click: registerClick, disable: hasClickedTooManyTimes' id="product17_btn">Add to cart</button>
+  
+  </div>
+    </div>
+  </div>
+  <div class="container single-item">
+    <div class="row" id="product18">
+      <div class="col-sm-2">
+          <span class="wishlist">
+              <a alt="Add to Wish List" title="Add to Wish List" href="javascript:void(0);"> <i class="fa fa-heart"></i></a>
+              </span>
+              <a href="#">
+              <img id="product18_img" src="https://m.media-amazon.com/images/I/81HJ4pkOsiL._AC_UY218_.jpg"> 
+              </a>
+      </div>
+      <div class="col-sm-4">
+        <a id="product18_name" href="test.html?productimg=https://m.media-amazon.com/images/I/81HJ4pkOsiL._AC_UY218_.jpg&productname=realme narzo 50i&productprice=₹7,499.00">realme narzo 50i</a>
+        <!-- <h4><b id="product18_name">realme narzo 50i </b></h4> -->
+        <p style="color:red">Only 1 left in stock.</p>
+        <p>Sold by <b style="color:blue">Arigato.</b></p>
+        <p>Gift options not available.Gift options not available. <b style="color:blue">Learn more.</b></p>
+        <p><b>Colour: </b>Sky Blue</p>
+      </div>
+      <div class="col-sm-4">
+  <h4 class="currencyINR" id="product18_price">  ₹7,499.00</h4>
+  <button data-bind='click: registerClick, disable: hasClickedTooManyTimes' id="product18_btn">Add to cart</button>
+  
+  </div>
+    </div>
+  </div>
+  <div class="container single-item">
+    <div class="row" id="product19">
+      <div class="col-sm-2">
+          <span class="wishlist">
+              <a alt="Add to Wish List" title="Add to Wish List" href="javascript:void(0);"> <i class="fa fa-heart"></i></a>
+              </span>
+              <a href="#">
+              <img id="product19_img" src="https://m.media-amazon.com/images/I/81vkmw6NgxL._AC_UY218_.jpg"> 
+              </a>
+      </div>
+      <div class="col-sm-4">
+        <a id="product19_name" href="test.html?productimg=https://m.media-amazon.com/images/I/81vkmw6NgxL._AC_UY218_.jpg&productname=realme narzo 50i Prime (Mint Green 3GB RAM+32GB Storage)&productprice=₹7,699.00">realme narzo 50i Prime (Mint Green 3GB RAM+32GB Storage)</a>
+
+        <!-- <h4><b id="product19_name">realme narzo 50i Prime (Mint Green 3GB RAM+32GB Storage)</b></h4> -->
+        <p style="color:red">Only 1 left in stock.</p>
+        <p>Sold by <b style="color:blue">Arigato.</b></p>
+        <p>Gift options not available.Gift options not available. <b style="color:blue">Learn more.</b></p>
+        <p><b>Colour: </b>Sky Blue</p>
+      </div>
+      <div class="col-sm-4">
+  <h4 class="currencyINR" id="product19_price">  ₹7,699.00</h4>
+  <button data-bind='click: registerClick, disable: hasClickedTooManyTimes' id="product19_btn">Add to cart</button>
+  
+  </div>
+    </div>
+  </div>
+  <div class="container single-item">
+    <div class="row" id="product20">
+      <div class="col-sm-2">
+          <span class="wishlist">
+              <a alt="Add to Wish List" title="Add to Wish List" href="javascript:void(0);"> <i class="fa fa-heart"></i></a>
+              </span>
+              <a href="#">
+              <img id="product20_img" src="https://m.media-amazon.com/images/I/71Ta0Hcl+PL._AC_UY218_.jpg"> 
+              </a>
+      </div>
+      <div class="col-sm-4">
+        <a id="product20_name" href="test.html?productimg=https://m.media-amazon.com/images/I/71Ta0Hcl+PL._AC_UY218_.jpg&productname=Redmi 10A Sport (Sea Blue, 6GB RAM, 128GB Storage)&productprice=₹10,499.00">Redmi 10A Sport (Sea Blue, 6GB RAM, 128GB Storage)</a>
+
+        <!-- <h4><b id="product20_name">Redmi 10A Sport (Sea Blue, 6GB RAM, 128GB Storage)</b></h4> -->
+        <p style="color:red">Only 1 left in stock.</p>
+        <p>Sold by <b style="color:blue">Arigato.</b></p>
+        <p>Gift options not available.Gift options not available. <b style="color:blue">Learn more.</b></p>
+        <p><b>Colour: </b>Sky Blue</p>
+      </div>
+      <div class="col-sm-4">
+  <h4 class="currencyINR" id="product20_price">  ₹10,499.00</h4>
+  <button data-bind='click: registerClick, disable: hasClickedTooManyTimes' id="product20_btn">Add to cart</button>
+  
+  </div>
+    </div>
+  </div>
+  </div>
+
+  </div>
+  
+
+</body>
+</html>
+
+
+<script>
+
+function CartList(productId,name,productImg,quantity,price){
+            this.name=name;
+            this.productImg=productImg;
+            this.quantity=quantity;
+            this.price = price;
+            self.total = ko.observable(price);
+            totalprice=price;
+            this.productId = productId;
+            // console.log(price);
+}
+
+var self = this;
+    self.array = [];
+    // self.total = [];
+    // self.totalprice=ko.observable(0);
+
+    self.myArray1 = ko.observableArray(self.array).extend({trackArrayChanges: true});
+    // self.totalprice = ko.observableArray(self.total);
+var ClickCounterViewModel = function(total,quantity) {
+    this.numberOfClicks = ko.observable(0);
+    this.totalprice = ko.observable();
+    this.registerClick = function() {
+        var prodId = event.currentTarget.id.split('_')[0];
+        var checkProductCartExist = self.myArray1().filter((value)=>{
+          return value.productId === prodId;
+        });
+        let tis = this;
+        if( !checkProductCartExist.length ){
+          var acc= new CartList(prodId,$('#'+prodId+'_name').text(),$('#'+prodId+'_img').attr('src'),1,$('#'+prodId+'_price').text());
+          self.myArray1.push(acc);
+          // $.each(self.myArray1(),function(val,i){
+          //   tis.totalprice(tis.totalprice() + parseInt(i.quantity) * i.price.trim().slice(1).split(',').join(''));
+          // });
+          this.totalprice((this.totalprice() ? this.totalprice() : 0)+ parseInt(($('#'+prodId+'_price').text()).trim().slice(1).split(',').join('')));
+          this.numberOfClicks(this.numberOfClicks() + 1);
+        } else {
+          
+          this.totalprice((this.totalprice() ? this.totalprice() : 0)+ parseInt(($('#'+prodId+'_price').text()).trim().slice(1).split(',').join('')));
+
+          alert('Product already in cart list, Please check!');
+        }
+      
+      // self.total.push(acc.price)
+      //  self.total += Number(acc.price);
+      
+    };
+ 
+    this.resetClicks = function() {
+        this.numberOfClicks(0);
+    };
+ 
+    this.hasClickedTooManyTimes = ko.pureComputed(function() {
+        return this.numberOfClicks() >= 20;
+    }, this);
+
+    this.cartListClick = function(){
+      if( $('.dropdown-content:visible').length ){
+        $('.dropdown-content').hide();
+      } else {
+        $('.dropdown-content').show();
+      }
+      
+    }
+    let that = this;
+    self.quantityChange = function(){
+      let priceArr = [];
+      $.each(self.myArray1(),function(val,i){
+        priceArr.push(parseInt(i.quantity) * parseFloat(i.price.trim().slice(1).split(',').join('')));
+        that.totalprice(priceArr.reduce((pre,curr)=>pre+curr,0));
+        console.log(that.totalprice())
+      });
+      
+    }
+    
+};
+ko.applyBindings(new ClickCounterViewModel(self.total));
+
+(function($) {
+	var pagify = {
+		items: {},
+		container: null,
+		totalPages: 1,
+		perPage: 3,
+		currentPage: 0,
+		createNavigation: function() {
+			this.totalPages = Math.ceil(this.items.length / this.perPage);
+
+			$('.pagination', this.container.parent()).remove();
+			var pagination = $('<div class="col-sm-7 pagination" style="text-align: right;font-size: 40px;"></div>').append('<a class="test nav prev disabled" data-next="false"><</a>');
+
+			for (var i = 0; i < this.totalPages; i++) {
+				var pageElClass = "page";
+				if (!i)
+					pageElClass = "page current";
+				var pageEl = '<a class="' + pageElClass + '" data-page="' + (
+				i + 1) + '">' + (
+				i + 1) + "</a>";
+				pagination.append(pageEl);
+			}
+			pagination.append('<a class="nav next test" data-next="true">></a>');
+
+			this.container.after(pagination);
+
+			var that = this;
+			$("body").off("click", ".nav");
+			this.navigator = $("body").on("click", ".nav", function() {
+				var el = $(this);
+				that.navigate(el.data("next"));
+			});
+
+			$("body").off("click", ".page");
+			this.pageNavigator = $("body").on("click", ".page", function() {
+				var el = $(this);
+				that.goToPage(el.data("page"));
+			});
+		},
+		navigate: function(next) {
+			// default perPage to 5
+			if (isNaN(next) || next === undefined) {
+				next = true;
+			}
+			$(".pagination .nav").removeClass("disabled");
+			if (next) {
+				this.currentPage++;
+				if (this.currentPage > (this.totalPages - 1))
+					this.currentPage = (this.totalPages - 1);
+				if (this.currentPage == (this.totalPages - 1))
+					$(".pagination .nav.next").addClass("disabled");
+				}
+			else {
+				this.currentPage--;
+				if (this.currentPage < 0)
+					this.currentPage = 0;
+				if (this.currentPage == 0)
+					$(".pagination .nav.prev").addClass("disabled");
+				}
+
+			this.showItems();
+		},
+		updateNavigation: function() {
+
+			var pages = $(".pagination .page");
+			pages.removeClass("current");
+			$('.pagination .page[data-page="' + (
+			this.currentPage + 1) + '"]').addClass("current");
+		},
+		goToPage: function(page) {
+
+			this.currentPage = page - 1;
+
+			$(".pagination .nav").removeClass("disabled");
+			if (this.currentPage == (this.totalPages - 1))
+				$(".pagination .nav.next").addClass("disabled");
+
+			if (this.currentPage == 0)
+				$(".pagination .nav.prev").addClass("disabled");
+			this.showItems();
+		},
+		showItems: function() {
+			this.items.hide();
+			var base = this.perPage * this.currentPage;
+			this.items.slice(base, base + this.perPage).show();
+
+			this.updateNavigation();
+		},
+		init: function(container, items, perPage) {
+			this.container = container;
+			this.currentPage = 0;
+			this.totalPages = 1;
+			this.perPage = perPage;
+			this.items = items;
+			this.createNavigation();
+			this.showItems();
+		}
+	};
+
+	// stuff it all into a jQuery method!
+	$.fn.pagify = function(perPage, itemSelector) {
+		var el = $(this);
+		var items = $(itemSelector, el);
+
+		// default perPage to 5
+		if (isNaN(perPage) || perPage === undefined) {
+			perPage = 3;
+		}
+
+		// don't fire if fewer items than perPage
+		if (items.length <= perPage) {
+			return true;
+		}
+
+		pagify.init(el, items, perPage);
+	};
+})(jQuery);
+
+$(".demo").pagify(5, ".single-item");
+
+</script>
